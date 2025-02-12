@@ -5,6 +5,7 @@ import HomePage from "./pages/HomePage";
 import ChatPage from "./pages/ChatPage";
 
 function App() {
+  
   return (
     <div className="App">
       <Route path="/" component={HomePage} exact/>
