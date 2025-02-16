@@ -3,9 +3,21 @@
 .App {
     min-height: 100vh;
     display: flex;
-    background-image: url('./pixelcut-export.jpg');
+    background-image: url('./pixelcut-export\ \(1\).jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     background-attachment: fixed;
+}
+
+::-webkit-scrollbar {
+    width: 0px;
+}
+
+::-webkit-scrollbar-thumb{
+    background: rgba(136, 136,136,0.281);
+}
+
+::-webkit-scrollbar-thumb:hover{
+    background: #555;
 }
