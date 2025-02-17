@@ -6,7 +6,6 @@
   "scripts": {
     "start": "nodemon backend/server.js"
   },
-  "proxy": "http://127.0.0.1:5000",
   "author": "Kavya Mittal",
   "license": "ISC",
   "dependencies": {
@@ -19,6 +18,7 @@
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "express-async-handler": "^1.2.0",
+    "http-proxy-middleware": "^3.0.3",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.13.0",
     "mongoose": "^8.10.0",

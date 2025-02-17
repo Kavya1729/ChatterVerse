@@ -18,7 +18,6 @@ import { ChatState } from "../../Context/ChatProvider";
 import UserListItem from "../UserAvatar/UserListItem";
 import { useToast } from "@chakra-ui/react";
 import UserBadgeItem from "../UserAvatar/UserBadgeItem";
-// import { useState } from "react";
 import { FormControl, Input, Spinner } from "@chakra-ui/react";
 
 const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
@@ -29,8 +28,10 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
   const [renameloading, setRenameloading] = useState(false);
+  const [selectedUsers, setSelectedUsers] = useState(selectedChat.users); // Keep track of selected users
 
   const toast = useToast();
+
   const handleAddUser = async (user1) => {
     if (selectedChat.users.find((u) => u._id === user1._id)) {
       toast({
@@ -76,7 +77,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
     } catch (error) {
       const errorMessage = error.response
         ? error.response.data.message
-        : error.message || "An error occurred"; // Fallback error message
+        : error.message || "An error occurred";
       toast({
         title: "Error Occurred!",
         description: errorMessage,
@@ -120,12 +121,11 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
 
       user1._id === user._id ? setSelectedChat() : setSelectedChat(data);
       setFetchAgain(!fetchAgain);
-    //   fetchMessages();
       setLoading(false);
     } catch (error) {
       const errorMessage = error.response
         ? error.response.data.message
-        : error.message || "An error occurred"; // Fallback error message
+        : error.message || "An error occurred";
       toast({
         title: "Error Occurred!",
         description: errorMessage,
@@ -164,7 +164,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
     } catch (error) {
       const errorMessage = error.response
         ? error.response.data.message
-        : error.message || "An error occurred"; // Fallback error message
+        : error.message || "An error occurred";
       toast({
         title: "Error Occurred!",
         description: errorMessage,
@@ -192,7 +192,6 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
         },
       };
       const { data } = await axios.get(`/api/user?search=${search}`, config);
-      console.log(data);
       setLoading(false);
       setSearchResult(data);
     } catch (error) {
@@ -207,6 +206,94 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
       setLoading(false);
     }
   };
+
+  const handleDelete = async (delUser) => {
+    try {
+      // Make the API request to remove the user from the group
+      setLoading(true);
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+      const { data } = await axios.put(
+        `/api/chat/groupremove`,
+        {
+          chatId: selectedChat._id,
+          userId: delUser._id,
+        },
+        config
+      );
+
+      // Update the selectedChat and remove the user from the UI
+      setSelectedChat(data);
+      setSelectedUsers(data.users); // Update the selected users after the user has been removed
+      setFetchAgain(!fetchAgain);
+      setLoading(false);
+
+      // Provide feedback to the user
+      toast({
+        title: "User Removed",
+        description: "User has been successfully removed from the group.",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+    } catch (error) {
+      const errorMessage = error.response
+        ? error.response.data.message
+        : error.message || "An error occurred";
+      toast({
+        title: "Error Occurred!",
+        description: errorMessage,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setLoading(false);
+    }
+  };
+
+
+  // Handle leaving the group
+  const handleLeaveGroup = async () => {
+    try {
+      setLoading(true);
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+      const { data } = await axios.put(
+        `/api/chat/leave`,
+        {
+          chatId: selectedChat._id,
+        },
+        config
+      );
+
+      setSelectedChat(null);
+      setFetchAgain(!fetchAgain);
+      setLoading(false);
+      onClose();
+    } catch (error) {
+      const errorMessage = error.response
+        ? error.response.data.message
+        : error.message || "An error occurred";
+      toast({
+        title: "Error Occurred!",
+        description: errorMessage,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       <IconButton
@@ -229,12 +316,12 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
           <ModalCloseButton />
           <ModalBody>
             <Box w="100%" display="flex" flexWrap="wrap" pb={3}>
-              {selectedChat.users.map((u) => (
+              {selectedUsers.map((u) => (
                 <UserBadgeItem
                   key={u._id}
                   user={u}
                   admin={selectedChat.groupAdmin}
-                  handleFunction={() => handleRemove(u)}
+                  handleFunction={() => handleDelete(u)} // Remove user on click
                 />
               ))}
             </Box>
@@ -276,7 +363,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
           </ModalBody>
 
           <ModalFooter>
-            <Button onClick={() => handleRemove(user)} colorScheme="red">
+            <Button onClick={handleLeaveGroup} colorScheme="red">
               Leave Group
             </Button>
           </ModalFooter>
