@@ -136,7 +136,7 @@ const GroupChatModal = ({ children }) => {
             display="flex"
             justifyContent="center"
           >
-            Modal Title
+            Group Chat
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody display="flex" flexDir="column" alignItems="center">
