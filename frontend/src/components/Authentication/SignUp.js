@@ -1,16 +1,11 @@
-import React, {useState } from "react";
-import { useHistory } from "react-router-dom";
+import { Button } from "@chakra-ui/react";
+import { FormControl, FormLabel } from "@chakra-ui/react";
+import { Input, InputGroup, InputRightElement } from "@chakra-ui/react";
+import { VStack } from "@chakra-ui/react";
 import { useToast } from "@chakra-ui/react";
 import axios from "axios";
-import {
-  FormControl,
-  FormLabel,
-  Input,
-  InputGroup,
-  InputRightElement,
-  VStack,
-  Button,
-} from "@chakra-ui/react";
+import { useState } from "react";
+import { useHistory } from "react-router";
 
 const Signup = () => {
   const [show, setShow] = useState(false);
@@ -20,17 +15,16 @@ const Signup = () => {
 
   const [name, setName] = useState();
   const [email, setEmail] = useState();
-  const [confirmPassword, setConfirmPassword] = useState();
+  const [confirmpassword, setConfirmpassword] = useState();
   const [password, setPassword] = useState();
   const [pic, setPic] = useState();
   const [picLoading, setPicLoading] = useState(false);
 
-
   const submitHandler = async () => {
     setPicLoading(true);
-    if (!name || !email || !password || !confirmPassword) {
+    if (!name || !email || !password || !confirmpassword) {
       toast({
-        title: "Please Fill all the Fields",
+        title: "Please Fill all the Feilds",
         status: "warning",
         duration: 5000,
         isClosable: true,
@@ -39,7 +33,7 @@ const Signup = () => {
       setPicLoading(false);
       return;
     }
-    if (password !== confirmPassword) {
+    if (password !== confirmpassword) {
       toast({
         title: "Passwords Do Not Match",
         status: "warning",
@@ -49,7 +43,7 @@ const Signup = () => {
       });
       return;
     }
-
+    console.log(name, email, password, pic);
     try {
       const config = {
         headers: {
@@ -58,7 +52,12 @@ const Signup = () => {
       };
       const { data } = await axios.post(
         "/api/user",
-        { name, email, password, pic },
+        {
+          name,
+          email,
+          password,
+          pic,
+        },
         config
       );
       console.log(data);
@@ -71,10 +70,11 @@ const Signup = () => {
       });
       localStorage.setItem("userInfo", JSON.stringify(data));
       setPicLoading(false);
-      history.push("/chats"); // Redirect after successful registration
+      history.push("/chats");
+      window.location.reload();
     } catch (error) {
       toast({
-        title: "Error Occurred!",
+        title: "Error Occured!",
         description: error.response.data.message,
         status: "error",
         duration: 5000,
@@ -95,11 +95,9 @@ const Signup = () => {
         isClosable: true,
         position: "bottom",
       });
-      // setPicLoading(false);
       return;
     }
     console.log(pics);
-
     if (pics.type === "image/jpeg" || pics.type === "image/png") {
       const data = new FormData();
       data.append("file", pics);
@@ -133,52 +131,32 @@ const Signup = () => {
   };
 
   return (
-    <VStack spacing="5px" color="white">
+    <VStack spacing="5px">
       <FormControl id="first-name" isRequired>
-        <FormLabel color="white" fontWeight="bold" fontSize="lg">
-          Name
-        </FormLabel>
+        <FormLabel color="white">Name</FormLabel>
         <Input
           placeholder="Enter Your Name"
           onChange={(e) => setName(e.target.value)}
-          color="white"
-          _placeholder={{
-            color: "white",
-            fontWeight: "bold",
-            fontSize: "lg",
-          }}
+          _placeholder={{ color: "white" }} // Make placeholder text white
         />
       </FormControl>
       <FormControl id="email" isRequired>
-        <FormLabel color="white" fontWeight="bold" fontSize="lg">
-          Email Address
-        </FormLabel>
+        <FormLabel color="white">Email Address</FormLabel>
         <Input
-          placeholder="Enter Your Email"
+          type="email"
+          placeholder="Enter Your Email Address"
           onChange={(e) => setEmail(e.target.value)}
-          color="white"
-          _placeholder={{
-            color: "white",
-            fontWeight: "bold",
-            fontSize: "lg",
-          }}
+          _placeholder={{ color: "white" }} // Make placeholder text white
         />
       </FormControl>
       <FormControl id="password" isRequired>
-        <FormLabel color="white" fontWeight="bold" fontSize="lg">
-          Password
-        </FormLabel>
-        <InputGroup saturate='md'>
+        <FormLabel color="white">Password</FormLabel>
+        <InputGroup size="md">
           <Input
             type={show ? "text" : "password"}
-            placeholder="Enter Your Password"
+            placeholder="Enter Password"
             onChange={(e) => setPassword(e.target.value)}
-            color="white"
-            _placeholder={{
-              color: "white",
-              fontWeight: "bold",
-              fontSize: "lg",
-            }}
+            _placeholder={{ color: "white" }} // Make placeholder text white
           />
           <InputRightElement width="4.5rem">
             <Button h="1.75rem" size="sm" onClick={handleClick}>
@@ -188,20 +166,13 @@ const Signup = () => {
         </InputGroup>
       </FormControl>
       <FormControl id="password" isRequired>
-        <FormLabel color="white" fontWeight="bold" fontSize="lg">
-          Confirm Password
-        </FormLabel>
+        <FormLabel color="white">Confirm Password</FormLabel>
         <InputGroup size="md">
           <Input
             type={show ? "text" : "password"}
-            placeholder="Confirm Your Password"
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            color="white"
-            _placeholder={{
-              color: "white",
-              fontWeight: "bold",
-              fontSize: "lg",
-            }}
+            placeholder="Confirm password"
+            onChange={(e) => setConfirmpassword(e.target.value)}
+            _placeholder={{ color: "white" }} // Make placeholder text white
           />
           <InputRightElement width="4.5rem">
             <Button h="1.75rem" size="sm" onClick={handleClick}>
@@ -211,21 +182,12 @@ const Signup = () => {
         </InputGroup>
       </FormControl>
       <FormControl id="pic">
-        <FormLabel color="white" fontWeight="bold" fontSize="lg">
-          Profile Picture
-        </FormLabel>
+        <FormLabel color="white">Upload your Picture</FormLabel>
         <Input
           type="file"
           p={1.5}
           accept="image/*"
-          placeholder="Upload Your Profile Picture"
           onChange={(e) => postDetails(e.target.files[0])}
-          color="white"
-          _placeholder={{
-            color: "white",
-            fontWeight: "bold",
-            fontSize: "lg",
-          }}
         />
       </FormControl>
       <Button

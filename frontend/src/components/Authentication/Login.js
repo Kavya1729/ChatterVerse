@@ -1,27 +1,24 @@
-import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
-import { useToast } from "@chakra-ui/react";
+import { Button } from "@chakra-ui/react";
+import { FormControl, FormLabel } from "@chakra-ui/react";
+import { Input, InputGroup, InputRightElement } from "@chakra-ui/react";
+import { VStack } from "@chakra-ui/react";
+import { useState } from "react";
 import axios from "axios";
-// import { setUser } from "../../utils/localStorage";
-import {
-  VStack,
-  FormControl,
-  FormLabel,
-  Input,
-  InputGroup,
-  InputRightElement,
-  Button,
-} from "@chakra-ui/react";
+import { useToast } from "@chakra-ui/react";
+import { useHistory } from "react-router-dom";
+import { ChatState } from "../../Context/ChatProvider";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [show, setShow] = useState(false);
-  const[loading, setLoading] = useState(false);
-  const toast = useToast();
-  const history = useHistory();
   const handleClick = () => setShow(!show);
-  
+  const toast = useToast();
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
+  const [loading, setLoading] = useState(false);
+
+  const history = useHistory();
+  const { setUser } = ChatState();
+
   const submitHandler = async () => {
     setLoading(true);
     if (!email || !password) {
@@ -48,6 +45,7 @@ const Login = () => {
         { email, password },
         config
       );
+      localStorage.setItem("userInfo", JSON.stringify(data));
 
       toast({
         title: "Login Successful",
@@ -56,7 +54,7 @@ const Login = () => {
         isClosable: true,
         position: "bottom",
       });
-      localStorage.setItem("userInfo", JSON.stringify(data));
+      setUser(data);
       setLoading(false);
       history.push("/chats");
     } catch (error) {
@@ -72,39 +70,27 @@ const Login = () => {
     }
   };
 
-
   return (
-    <VStack spacing="5px" color="white">
+    <VStack spacing="10px">
       <FormControl id="email" isRequired>
-        <FormLabel color="white" fontWeight="bold" fontSize="lg">
-          Email
-        </FormLabel>
+        <FormLabel color="white">Email Address</FormLabel>
         <Input
-          placeholder="Enter Your Email"
-          onChange={(e) => setEmail(e.target.value)}
-          color="white"
           value={email}
-          placeholderColor="white"
-          _placeholder={{ color: "white", fontWeight: "bold", fontSize: "lg" }}
+          type="email"
+          placeholder="Enter Your Email Address"
+          onChange={(e) => setEmail(e.target.value)}
+          _placeholder={{ color: "white" }} // Make placeholder text white
         />
       </FormControl>
       <FormControl id="password" isRequired>
-        <FormLabel color="white" fontWeight="bold" fontSize="lg">
-          Password
-        </FormLabel>
-        <InputGroup>
+        <FormLabel color="white">Password</FormLabel>
+        <InputGroup size="md">
           <Input
-            type={show ? "text" : "password"}
-            placeholder="Enter Your Password"
-            onChange={(e) => setPassword(e.target.value)}
-            color="white"
             value={password}
-            placeholderColor="white"
-            _placeholder={{
-              color: "white",
-              fontWeight: "bold",
-              fontSize: "lg",
-            }}
+            onChange={(e) => setPassword(e.target.value)}
+            type={show ? "text" : "password"}
+            placeholder="Enter password"
+            _placeholder={{ color: "white" }} // Make placeholder text white
           />
           <InputRightElement width="4.5rem">
             <Button h="1.75rem" size="sm" onClick={handleClick}>
@@ -126,9 +112,8 @@ const Login = () => {
         variant="solid"
         colorScheme="red"
         width="100%"
-        style={{ marginTop: 15 }}
         onClick={() => {
-          setEmail("guest@guest.com");
+          setEmail("guest@example.com");
           setPassword("123456");
         }}
       >
