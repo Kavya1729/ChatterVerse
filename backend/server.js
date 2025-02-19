@@ -5,6 +5,8 @@ const connectDB = require('./config/db');
 const colors = require('colors');
 const userRoutes = require('./routes/userRoutes');
 const chatRoutes = require('./routes/chatRoutes');
+const messageRoutes = require('./routes/messageRoutes');
+
 const {notfound,errorHandler} = require('./middleware/errorMiddleware');
 const path = require('path');
  
@@ -23,6 +25,7 @@ app.get('/',(req,res)=>{
 
 app.use('/api/user',userRoutes);
 app.use('/api/chat',chatRoutes);
+app.use('/api/message',messageRoutes);
 
 const PORT = process.env.PORT || 5001;
 
