@@ -116,7 +116,8 @@ const SideDrawer = () => {
         display="flex"
         justifyContent="space-between"
         alignItems="center"
-        bg="white"
+        backgroundColor="rgba(255, 255, 255, 0.5)"
+        // bg="white"
         width="100%"
         padding="5px 10px"
         borderWidth="5px"
@@ -124,34 +125,37 @@ const SideDrawer = () => {
         <Tooltip label="Search for users" hasArrow placement="bottom-end">
           <Button variant="ghost" onClick={onOpen}>
             <i className="fas fa-search"></i>
-            <Text display={{ base: "none", md: "flex" }} px="3">
+            <Text display={{ base: "none", md: "flex" }} color={'white'} px="3">
               Search User
             </Text>
           </Button>
         </Tooltip>
-        <Text fontSize="2xl" fontFamily="Work Sans">
+        <Text fontSize="2xl" fontFamily="Work Sans" color={'white'}>
           Let's Chat
         </Text>
         <Box display="flex" alignItems="center" gap={4}>
           <Menu>
             <MenuButton p={1}>
               <NotificationBadge
-              count={notification.length}
-              effect={Effect.SCALE}
-               />
+                count={notification.length}
+                effect={Effect.SCALE}
+              />
               <BellIcon fontSize="xl" />
             </MenuButton>
-            <MenuList pl={2}>{
-            !notification.length && "No New Messages"}
-            {notification.map(notif=>(
-              <MenuItem key={notif._id} onClick={()=>{
-                setSelectedChat(notif.chat);
-              }}>
-                {
-                  notif.chat.isGroupChat?`New message in ${notif.chat.name}`:`New message from ${getSender(user,notif.chat.users)}`
-                }
-              </MenuItem>
-            ))}
+            <MenuList pl={2}>
+              {!notification.length && "No New Messages"}
+              {notification.map((notif) => (
+                <MenuItem
+                  key={notif._id}
+                  onClick={() => {
+                    setSelectedChat(notif.chat);
+                  }}
+                >
+                  {notif.chat.isGroupChat
+                    ? `New message in ${notif.chat.name}`
+                    : `New message from ${getSender(user, notif.chat.users)}`}
+                </MenuItem>
+              ))}
             </MenuList>
           </Menu>
           <Menu>
@@ -198,7 +202,7 @@ const SideDrawer = () => {
                 />
               ))
             )}
-            {loadingChat && <Spinner ml='auto' display='flex'/>}
+            {loadingChat && <Spinner ml="auto" display="flex" />}
           </DrawerBody>
         </DrawerContent>
       </Drawer>

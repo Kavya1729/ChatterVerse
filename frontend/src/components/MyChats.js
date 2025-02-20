@@ -50,7 +50,8 @@ const MyChats = ({ fetchAgain }) => {
       flexDir="column"
       alignItems="center"
       p={3}
-      bg="white"
+      // bg="white"
+      backgroundColor="rgba(255, 255, 255, 0.4)"
       width={{ base: "100%", md: "29%" }}
       borderRadius="lg"
       borderWidth="1px"
@@ -60,6 +61,7 @@ const MyChats = ({ fetchAgain }) => {
         px={3}
         fontSize={{ base: "28px", md: "30px" }}
         fontFamily="Work sans"
+        color='white'
         display="flex"
         width="100%"
         justifyContent="space-between"
@@ -84,10 +86,10 @@ const MyChats = ({ fetchAgain }) => {
         p={3}
         bg="#F8F8F8"
         width="100%"
-        height="600px" 
+        height="750px"
         borderRadius="lg"
-        overflowY="hidden" 
-        boxSizing="border-box" 
+        overflowY="hidden"
+        boxSizing="border-box"
       >
         {chats ? (
           <Stack overflowY="auto" height="100%">

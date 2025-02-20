@@ -171,11 +171,12 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       {selectedChat ? (
         <>
           <Text
-            fontSize={{ base: "28px", md: "30px" }}
+            fontSize={{ base: "30px", md: "30px" }}
             pb={3}
             px={2}
             w="100%"
             fontFamily="Work sans"
+            color="white"
             display="flex"
             justifyContent={{ base: "space-between" }}
             alignItems="center"
@@ -210,7 +211,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             p={3}
             bg="#E8E8E8"
             w="100%"
-            h="100%"
+            h="750px"
             borderRadius="lg"
             overflowY="hidden"
           >
@@ -224,24 +225,28 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               />
             ) : (
               <div className="messages">
-                <ScrollableChat messages={messages}/>
-
+                <ScrollableChat messages={messages} />
               </div>
             )}
             <FormControl onKeyDown={sendMessage} isRequired mt={3}>
-              {isTyping?<div>
-                <Lottie
-                options={defaultOptions}
-                width={70}
-                style={{marginBottom:15,marginLeft:0}}
-                />
-              </div>:<></>}
+              {isTyping ? (
+                <div>
+                  <Lottie
+                    options={defaultOptions}
+                    width={70}
+                    style={{ marginBottom: 15, marginLeft: 0 }}
+                  />
+                </div>
+              ) : (
+                <></>
+              )}
               <Input
                 varaient="filled"
-                bg="#E0E0E0"
+                bg="#A0A0A0"
                 placeholder="Enter a message"
                 value={newMessage}
                 onChange={typingHandler}
+                sx={{ "::placeholder": { color: "white" } }}
               />
             </FormControl>
           </Box>
