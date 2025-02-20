@@ -23,6 +23,8 @@ import { useHistory } from "react-router-dom";
 import { useDisclosure } from "@chakra-ui/react";
 import axios from "axios";
 import ChatLoading from "../ChatLoading";
+import { getSender } from "../../config/ChatLogics";
+import NotificationBadge, { Effect } from "react-notification-badge";
 
 const SideDrawer = () => {
   const [search, setSearch] = useState("");
@@ -34,7 +36,7 @@ const SideDrawer = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast(); // Correctly call useToast at the top level
 
-  const { user,setSelectedChat,chats,setChats,selectedChat } = ChatState();
+  const { user,setSelectedChat,chats,setChats,selectedChat,notification,setNotification } = ChatState();
   const logoutHandler = () => {
     localStorage.removeItem("userInfo");
     history.push("/");
@@ -133,8 +135,24 @@ const SideDrawer = () => {
         <Box display="flex" alignItems="center" gap={4}>
           <Menu>
             <MenuButton p={1}>
+              <NotificationBadge
+              count={notification.length}
+              effect={Effect.SCALE}
+               />
               <BellIcon fontSize="xl" />
             </MenuButton>
+            <MenuList pl={2}>{
+            !notification.length && "No New Messages"}
+            {notification.map(notif=>(
+              <MenuItem key={notif._id} onClick={()=>{
+                setSelectedChat(notif.chat);
+              }}>
+                {
+                  notif.chat.isGroupChat?`New message in ${notif.chat.name}`:`New message from ${getSender(user,notif.chat.users)}`
+                }
+              </MenuItem>
+            ))}
+            </MenuList>
           </Menu>
           <Menu>
             <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
