@@ -44,7 +44,7 @@ const io = require('socket.io')(server,{
 })
 
 io.on("connection", (socket) => {
-  console.log("Connected to socket.io");
+  // console.log("Connected to socket.io");
 
   socket.on('setup',(userData)=>{
     socket.join(userData._id);
@@ -76,7 +76,7 @@ io.on("connection", (socket) => {
   })
 
   socket.off("setup", () => {
-    console.log("Disconnedtec");
+    // console.log("Disconnedtec");
     socket.leave(userData._id);
   });
 });
