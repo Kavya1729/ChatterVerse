@@ -48,12 +48,12 @@ app.use(errorHandler);
 
 const server = app.listen(PORT,console.log(`Server running on port ${PORT}`.blue.bold));
 
-const io = require('socket.io')(server,{
-    pingTimeout:60000,
-    cors:{
-        origin:'http://localhost:3000',
-    }
-})
+const io = require("socket.io")(server, {
+  pingTimeout: 60000,
+  cors: {
+    origin: "https://lets-chat-1-rp50.onrender.com",
+  },
+});
 
 io.on("connection", (socket) => {
   // console.log("Connected to socket.io");
