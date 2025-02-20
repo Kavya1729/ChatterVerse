@@ -126,7 +126,7 @@ const SideDrawer = () => {
           <Button variant="ghost" onClick={onOpen}>
             <i className="fas fa-search"></i>
             <Text display={{ base: "none", md: "flex" }} color={'white'} px="3">
-              Search User
+              Search Users
             </Text>
           </Button>
         </Tooltip>
