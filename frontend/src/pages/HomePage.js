@@ -9,6 +9,8 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useEffect } from "react";
+import logo from "../main-logo-white-transparent.png";
+import { Image } from "@chakra-ui/react";
 import { useHistory } from "react-router";
 import Login from "../components/Authentication/Login";
 import Signup from "../components/Authentication/SignUp";
@@ -35,14 +37,15 @@ function Homepage() {
         borderRadius="lg"
         borderWidth="1px"
       >
-        <Text
-          fontSize="4xl"
-          fontFamily="Work sans"
-          color="white"
-          fontWeight="bold"
-        >
-          Let's Talk
-        </Text>
+      <Box width="auto" height="60px" display="flex" alignItems="center">
+                <Image
+                  src={logo}
+                  alt="Logo"
+                  height="170px" 
+                  objectFit="contain"
+                  transform="translateY(2%)" 
+                />
+              </Box>
       </Box>
       <Box
         bg="rgba(255, 255, 255, 0.2)"
