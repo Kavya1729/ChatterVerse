@@ -25,6 +25,8 @@ import axios from "axios";
 import ChatLoading from "../ChatLoading";
 import { getSender } from "../../config/ChatLogics";
 import NotificationBadge, { Effect } from "react-notification-badge";
+import logo from "../../main-logo-white-transparent.png";
+import { Image } from "@chakra-ui/react";
 
 const SideDrawer = () => {
   const [search, setSearch] = useState("");
@@ -125,14 +127,20 @@ const SideDrawer = () => {
         <Tooltip label="Search for users" hasArrow placement="bottom-end">
           <Button variant="ghost" onClick={onOpen}>
             <i className="fas fa-search"></i>
-            <Text display={{ base: "none", md: "flex" }} color={'white'} px="3">
+            <Text display={{ base: "none", md: "flex" }} color={"white"} px="3">
               Search Users
             </Text>
           </Button>
         </Tooltip>
-        <Text fontSize="2xl" fontFamily="Work Sans" color={'white'}>
-          Let's Chat
-        </Text>
+        <Box width="auto" height="60px" display="flex" alignItems="center">
+          <Image
+            src={logo}
+            alt="Logo"
+            height="170px" 
+            objectFit="contain"
+            transform="translateY(2%)" 
+          />
+        </Box>
         <Box display="flex" alignItems="center" gap={4}>
           <Menu>
             <MenuButton p={1}>
